@@ -51,7 +51,7 @@ export default function App() {
             <button className="primary">Create an account</button>
             <p className="divider">OR SIGN UP WITH</p>
             <div className="social">
-              <button>Google</button>
+              <button>G</button>
             </div>
           </>
         )}
