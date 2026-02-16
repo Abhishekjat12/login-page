@@ -2,12 +2,11 @@ import "./App.css";
 import { useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import Add from "./pages/Add";
 
 
 export default function App() {
   const [tab, setTab] = useState("signup");
-  const [show, setShow] = useState(true);
-
   const [form, setForm] = useState({
     first: "",
     last: "",
@@ -18,10 +17,10 @@ export default function App() {
   const [phone, setPhone] = useState("");
   const [errors, setErrors] = useState({});
 
-  if (!show) return null;
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
+ 
 
   const validate = () => {
     let err = {};
@@ -49,7 +48,6 @@ export default function App() {
       alert(tab === "signup" ? "Account Created!!" : "Login Successful!!");
     }
   };
-
   return (
     <div className="container">
       <div className="card">
@@ -68,8 +66,6 @@ export default function App() {
               Sign in
             </button>
           </div>
-
-          <span className="close" onClick={() => setShow(false)}>×</span>
         </div>
         <h2>
           {tab === "signup" ? "Create an account" : "Welcome back"}
@@ -78,7 +74,7 @@ export default function App() {
           <>
             <div className="row">
               <div>
-                <input name="first" placeholder="First name" onChange={handleChange} />
+                <input name="first" placeholder="First name" value={form.first} onChange={handleChange} />
                 <small>{errors.first}</small>
               </div>
 
@@ -103,7 +99,6 @@ export default function App() {
               buttonClass="phone-flag"
               dropdownClass="phone-dropdown"
             />
-
 
             <input type="password" name="password" placeholder="Password" onChange={handleChange} />
             <small>{errors.password}</small>
@@ -163,5 +158,7 @@ export default function App() {
         </p>
       </div>
     </div>
+
   );
 }
+
