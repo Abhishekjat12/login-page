@@ -18,10 +18,25 @@ export default function App() {
   const [errors, setErrors] = useState({});
 
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
- 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
+    setForm(prev =>
+    ({
+      ...prev,
+      [name]: value
+    }));
+
+    setErrors(prev => {
+      const newErrors = { ...prev };
+      if (value.trim()) {
+        delete newErrors[name];
+      } else {
+        newErrors[name] = "Required";
+      }
+      return newErrors;
+    });
+  };
   const validate = () => {
     let err = {};
 
@@ -30,24 +45,20 @@ export default function App() {
       if (!form.last.trim()) err.last = "Required";
       if (phone.length < 10)
         err.phone = "Invalid phone";
-
     }
-
     if (!/^\S+@\S+\.\S+$/.test(form.email))
       err.email = "Invalid email";
-
     if (form.password.length < 8)
       err.password = "Invalid password";
-
     setErrors(err);
     return Object.keys(err).length === 0;
   };
-
   const handleSubmit = () => {
     if (validate()) {
       alert(tab === "signup" ? "Account Created!!" : "Login Successful!!");
     }
   };
+      
   return (
     <div className="container">
       <div className="card">
@@ -74,17 +85,26 @@ export default function App() {
           <>
             <div className="row">
               <div>
-                <input name="first" placeholder="First name" value={form.first} onChange={handleChange} />
-                <small>{errors.first}</small>
+                <input name="first" placeholder="First name" value={form.first} onChange={handleChange}
+                  style={{
+                    border: errors.first ? "1px solid #c71010" : ""
+                  }} />
+                <small className="errorinput">{errors.first}</small>
               </div>
 
               <div>
-                <input name="last" placeholder="Last name" onChange={handleChange} />
-                <small>{errors.last}</small>
+                <input name="last" placeholder="Last name" onChange={handleChange}
+                  style={{
+                    border: errors.last ? "1px solid #c71010" : ""
+                  }} />
+                <small className="errorinput">{errors.last}</small>
               </div>
             </div>
-            <input name="email" placeholder="Enter your email" onChange={handleChange} />
-            <small>{errors.email}</small>
+            <input name="email" placeholder="Enter your email" onChange={handleChange}
+              style={{
+                border: errors.email ? "1px solid #c71010" : ""
+              }} />
+            <small className="errorinput">{errors.email}</small>
 
             <PhoneInput
               country={"us"}
@@ -98,10 +118,12 @@ export default function App() {
               inputClass="phone-input"
               buttonClass="phone-flag"
               dropdownClass="phone-dropdown"
+              searchClass="custom-search"
+              containerStyle={{ marginBottom: "10px" }}
             />
-
-            <input type="password" name="password" placeholder="Password" onChange={handleChange} />
-            <small>{errors.password}</small>
+            <input type="password" name="password" placeholder="Password" onChange={handleChange}
+             />
+            <small className="errorinput">{errors.password}</small>
             <button className="primary" onClick={handleSubmit}>
               Create an account
             </button>
@@ -127,10 +149,10 @@ export default function App() {
         {tab === "signin" && (
           <>
             <input name="email" placeholder="Enter email" onChange={handleChange} />
-            <small>{errors.email}</small>
+            <small className="errorinput">{errors.email}</small>
 
             <input type="password" name="password" placeholder="Password" onChange={handleChange} />
-            <small>{errors.password}</small>
+            <small className="errorinput">{errors.password}</small>
             <button className="primary" onClick={handleSubmit}>
               Login
             </button>
