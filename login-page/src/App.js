@@ -62,6 +62,7 @@ export default function App() {
   return (
     <div className="container">
       <div className="card">
+
         <div className="top">
           <div className="tabs">
             <button
@@ -76,6 +77,7 @@ export default function App() {
             >
               Sign in
             </button>
+            <div className="slider"></div>
           </div>
         </div>
         <h2>
@@ -124,6 +126,7 @@ export default function App() {
             <input type="password" name="password" placeholder="Password" onChange={handleChange}
              />
             <small className="errorinput">{errors.password}</small>
+            <div className="state"> 
             <button className="primary" onClick={handleSubmit}>
               Create an account
             </button>
@@ -142,10 +145,12 @@ export default function App() {
                   width="18"
                   alt="Apple logo"
                 />
-              </button>
+              </button></div>
             </div>
           </>
+          
         )}
+       
         {tab === "signin" && (
           <>
             <input name="email" placeholder="Enter email" onChange={handleChange} />
@@ -153,6 +158,7 @@ export default function App() {
 
             <input type="password" name="password" placeholder="Password" onChange={handleChange} />
             <small className="errorinput">{errors.password}</small>
+             <div className="state">
             <button className="primary" onClick={handleSubmit}>
               Login
             </button>
@@ -172,12 +178,15 @@ export default function App() {
                   alt="Apple logo"
                 />
               </button>
+              </div>
             </div>
           </>
         )}
+        <div className="status">
         <p className="terms">
           By creating an account, you agree to our Terms & Service
         </p>
+        </div>
       </div>
     </div>
 

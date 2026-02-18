@@ -22,6 +22,8 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: white;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  height: 80vh;
+
 }
 
 .top {
@@ -29,28 +31,48 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+ 
 }
 
 .tabs {
   background: #111;
   padding: 4px;
   border-radius: 20px;
+  transition: 1s ease-in-right;
+  position: relative;
 }
 
 .tabs button {
   border: none;
   background: transparent;
   padding: 6px 16px;
-  color: #aaa;
-  cursor: pointer;
   border-radius: 20px;
+  position: relative;
+  z-index: 1;
+  color: #f4efef;
+  transition: color .50 linear;
 }
 
 .tabs .active {
-  background: #222;
+  
   color: white;
 }
-
+.tabs button.active{
+  color: white;
+}
+.slider{
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  height: calc(100% - 8px);
+  width: calc(50% - 4px);
+  background: #b36464;
+  border-radius: 20px;
+  transition: transform .35s linear;
+}
+.tabs button:nth-child(2).active ~ .slider{
+  transform: translateX(100%);
+}
 .close {
   cursor: pointer;
   font-size: 18px;
@@ -249,4 +271,16 @@ small {
 }
 .react-tel-input .selected-flag:hover, .react-tel-input .selected-flag:focus {
     background-color: transparent !important;
+}
+.state{
+ position: fixed;
+    bottom: 60px;
+    left: 29px;
+    right: 29px;
+}
+.status{
+  position: fixed;
+    bottom: 20px;
+    left: 29px;
+    right: 29px;
 }
