@@ -1,98 +1,197 @@
 import "./App.css";
+import { useState } from "react";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 
 
 export default function App() {
-  return (
+    const [tab, setTab] = useState("signup");
+    const [form, setForm] = useState({
+        first: "",
+        last: "",
+        email: "",
+        phone: "",
+        password: "",
+    });
+    const [phone, setPhone] = useState("");
+    const [errors, setErrors] = useState({});
 
-    <div className="container">
-      <table border="1" cellpadding="10" cellspacing="0">
-        <thead>
-          <tr>
-            <th>S/NO.</th>
-            <th >Email</th>
-            <th>Phone</th>
-            <th>City</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td className="email-header">rahul.sharma@gmail.com</td>
-            <td>9812345670</td>
-            <td>Mumbai</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td className="email-header">neha.verma@yahoo.com</td>
-            <td>9123456781</td>
-            <td>Pune</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td className="email-header">amit.kumar@outlook.com</td>
-            <td>9988776655</td>
-            <td>Lucknow</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td className="email-header">priya.singh@gmail.com</td>
-            <td>9876501234</td>
-            <td>Chandigarh</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td className="email-header">rohit.jain@mail.com</td>
-            <td>9090909090</td>
-            <td>Indore</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td className="email-header">kiran.patel@gmail.com</td>
-            <td>9345612789</td>
-            <td>Ahmedabad</td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td className="email-header">sunita.reddy@yahoo.com</td>
-            <td>8765432109</td>
-            <td>Hyderabad</td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td className="email-header">vikas.mehra@live.com</td>
-            <td>9011223344</td>
-            <td>Bangalore</td>
-          </tr>
-          <tr>
-            <td>9</td>
-            <td className="email-header">anita.das@gmail.com</td>
-            <td>8899776655</td>
-            <td>Kolkata</td>
-          </tr>
-          <tr>
-            <td>10</td>
-            <td className="email-header">deepak.malhotra@protonmail.com</td>
-            <td>9765432180</td>
-            <td>Jaipur</td>
-          </tr>
 
-        </tbody>
-      </table>
-      <div class="pagination">
-        <a href="#">«</a>
-        <a href="#" class="active">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">5</a>
-        <a href="#">»</a>
-      </div>
-    </div >
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setForm(prev =>
+        ({
+            ...prev,
+            [name]: value
+        }));
+
+
+        setErrors(prev => {
+            const newErrors = { ...prev };
+            if (value.trim()) {
+                delete newErrors[name];
+            } else {
+                newErrors[name] = "Required";
+            }
+            return newErrors;
+        });
+    };
+    const validate = () => {
+        let err = {};
+
+        if (tab === "signup") {
+            if (!form.first.trim()) err.first = "Required";
+            if (!form.last.trim()) err.last = "Required";
+            if (phone.length < 10)
+                err.phone = "Invalid phone";
+        }
+        if (!/^\S+@\S+\.\S+$/.test(form.email))
+            err.email = "Invalid email";
+        if (form.password.length < 8)
+            err.password = "Invalid password";
+        setErrors(err);
+        return Object.keys(err).length === 0;
+    };
+    const handleSubmit = () => {
+        if (validate()) {
+            alert(tab === "signup" ? "Account Created!!" : "Login Successful!!");
+        }
+    };
 
 
 
-  );
+    return (
+        <div className="container">
+            <div className="card">
+
+                <div className="top">
+                    <div className="tabs">
+                        <button
+                            className={tab === "signup" ? "active" : ""}
+                            onClick={() => setTab("signup")}
+                        >
+                            Sign up
+                        </button>
+                        <button
+                            className={tab === "signin" ? "active" : ""}
+                            onClick={() => setTab("signin")}
+                        >
+                            Sign in
+                        </button>
+                        <div className="slider"></div>
+                    </div>
+                </div>
+                <h2>
+                    {tab === "signup" ? "Create an account" : "Welcome back"}
+                </h2>
+                {tab === "signup" && (
+                    <>
+                        <div className="row">
+                            <div>
+                                <input name="first" placeholder="First name" value={form.first} onChange={handleChange}
+                                    style={{
+                                        border: errors.first ? "1px solid #c71010" : ""
+                                    }} />
+                                <small className="errorinput">{errors.first}</small>
+                            </div>
+
+                            <div>
+                                <input name="last" placeholder="Last name" onChange={handleChange}
+                                    style={{
+                                        border: errors.last ? "1px solid #c71010" : ""
+                                    }} />
+                                <small className="errorinput">{errors.last}</small>
+                            </div>
+                        </div>
+                        <input name="email" placeholder="Enter your email" onChange={handleChange}
+                            style={{
+                                border: errors.email ? "1px solid #c71010" : ""
+                            }} />
+                        <small className="errorinput">{errors.email}</small>
+
+                        <PhoneInput
+                            country={"us"}
+                            value={phone}
+                            onChange={(value) => {
+                                setPhone(value);
+                                setForm({ ...form, phone: value });
+                            }}
+                            enableSearch={true}
+                            containerClass="phone-container"
+                            inputClass="phone-input"
+                            buttonClass="phone-flag"
+                            dropdownClass="phone-dropdown"
+                            searchClass="custom-search"
+                            containerStyle={{ marginBottom: "10px" }}
+                        />
+                        <input type="password" name="password" placeholder="Password" onChange={handleChange}
+                        />
+                        <small className="errorinput">{errors.password}</small>
+                        <div className="state">
+                            <button className="primary" onClick={handleSubmit}>
+                                Create an account
+                            </button>
+                            <p className="divider">OR SIGN UP WITH</p>
+                            <div className="social">
+                                <button className="google-btn">
+                                    <img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/0/09/IOS_Google_icon.png"
+                                        width="18"
+                                        alt="Google logo"
+                                    />
+                                </button>
+                                <button className="apple-btn">
+                                    <img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+                                        width="18"
+                                        alt="Apple logo"
+                                    />
+                                </button></div>
+                        </div>
+                    </>
+
+                )}
+
+                {tab === "signin" && (
+                    <>
+                        <input name="email" placeholder="Enter email" onChange={handleChange} />
+                        <small className="errorinput">{errors.email}</small>
+
+                        <input type="password" name="password" placeholder="Password" onChange={handleChange} />
+                        <small className="errorinput">{errors.password}</small>
+                        <div className="state">
+                            <button className="primary" onClick={handleSubmit}>
+                                Login
+                            </button>
+                            <p className="divider">OR LOGIN WITH</p>
+                            <div className="social">
+                                <button className="google-btn" >
+                                    <img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/0/09/IOS_Google_icon.png"
+                                        width="18"
+                                        alt="Google logo"
+                                    />
+                                </button>
+                                <button className="apple-btn">
+                                    <img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+                                        width="18"
+                                        alt="Apple logo"
+                                    />
+                                </button>
+                            </div>
+                        </div>
+                    </>
+                )}
+                <div className="status">
+                    <p className="terms">
+                        By creating an account, you agree to our Terms & Service
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    );
 }
-
-
